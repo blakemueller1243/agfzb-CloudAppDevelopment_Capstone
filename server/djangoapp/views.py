@@ -67,7 +67,7 @@ def registration_request(request):
         # login(request, user)
 
         messages.success(request, 'Registration successful. You can now log in.')
-        return redirect('djangoapp/index.html')  # Redirect to the login page
+        return redirect('djangoapp:index')  # Redirect to the login page
 
     return render(request, 'djangoapp/registration.html')
 

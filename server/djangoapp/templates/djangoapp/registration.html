@@ -10,6 +10,13 @@
 <body>
     <div class="container mt-4">
         <h2>Sign Up</h2>
+        {% if messages %}
+            <div class="alert alert-success">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
         <form method="post" action="{% url 'djangoapp:registration' %}">
             {% csrf_token %}
             <div class="form-group">
