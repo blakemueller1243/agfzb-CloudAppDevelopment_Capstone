@@ -37,14 +37,14 @@ def login_request(request):
             messages.success(request, 'Login successful!')
         else:
             messages.error(request, 'Invalid username or password')
-    return redirect('djangoapp/index.html')
+    return redirect('djangoapp:index')
 
 # Create a `logout_request` view to handle sign out request
 def logout_request(request):
     if request.method == "POST":  # You can use a POST request for logout
         logout(request)  # Call the logout function to log the user out
         messages.success(request, 'Logout successful!')
-    return redirect('djangoapp/index.html')
+    return redirect('djangoapp:index')
 
 def registration_request(request):
     if request.method == 'POST':
