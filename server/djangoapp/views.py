@@ -37,18 +37,40 @@ def login_request(request):
             messages.success(request, 'Login successful!')
         else:
             messages.error(request, 'Invalid username or password')
-    return redirect('djangoapp:index')
+    return redirect('djangoapp/index.html')
 
 # Create a `logout_request` view to handle sign out request
 def logout_request(request):
     if request.method == "POST":  # You can use a POST request for logout
         logout(request)  # Call the logout function to log the user out
         messages.success(request, 'Logout successful!')
-    return redirect('djangoapp:index')
+    return redirect('djangoapp/index.html')
 
-# Create a `registration_request` view to handle sign up request
-# def registration_request(request):
-# ...
+def registration_request(request):
+    if request.method == 'POST':
+        # Get the form data from the POST request
+        username = request.POST['username']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        password = request.POST['password']
+
+        # Check if the username is already taken
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username is already taken. Please choose a different one.')
+            return redirect('signup')  # Redirect back to the signup page
+
+        # Create a new user account
+        user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, password=password)
+
+        # Optionally, you can log in the user automatically after registration
+        # from django.contrib.auth import login
+        # login(request, user)
+
+        messages.success(request, 'Registration successful. You can now log in.')
+        return redirect('djangoapp/index.html')  # Redirect to the login page
+
+    return render(request, 'djangoapp/registration.html')
+
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
