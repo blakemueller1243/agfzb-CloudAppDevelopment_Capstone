@@ -5,7 +5,15 @@ on:
     branches: [master, main]
   pull_request:
     branches: [master, main]
-
+  workflow_dispatch:
+    inputs:
+      lint_function_js:
+        description: 'Lint JavaScript Function'
+      lint_function_python:
+        description: 'Lint Python Function'
+      lint_django_server:
+        description: 'Lint Django Server'
+      
 jobs: # list of things to do
   lint_function_js:
     name: Linting JavaScript Function 
