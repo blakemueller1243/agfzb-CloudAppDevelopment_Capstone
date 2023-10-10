@@ -30,18 +30,21 @@ app.use(express.json());
 
 // Define a route to create a new review for a specific dealership by ID
 app.post('/dealerships/:dealership/reviews', (req, res) => {
-    const dealershipId = req.params.id; // Get the dealership ID from the URL
+    const dealership = +req.params.dealership; // Get the dealership ID from the URL
 
     // Extract review data from the request body
-    const { author, rating, comment } = req.body;
+    const { name, review, purchase, purchase_date, car_make, car_model, car_year } = req.body;
 
     // Create a new review object
     const newReview = {
-        author,
-        rating,
-        comment,
-        dealershipId, // Associate the review with the dealership by ID
-        timestamp: new Date().toISOString(), // Add a timestamp if needed
+        name,
+        dealership, // pulls id from request url
+        review,
+        purchase, // boolean
+        purchase_date,
+        car_make,
+        car_model,
+        car_year,
     };
 
     // Insert the new review into the database
@@ -65,7 +68,7 @@ app.get('/dealerships/:dealership/reviews', (req, res) => {
 
     // Create a selector object based on the dealership ID
     const selector = {
-        dealership: Number(dealershipId), // Assuming dealership is stored as a number in your schema
+        dealership: Number(dealershipId),
     };
 
     const queryOptions = {
