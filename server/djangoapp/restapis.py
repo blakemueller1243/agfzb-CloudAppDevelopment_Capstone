@@ -5,13 +5,7 @@ from requests.auth import HTTPBasicAuth
 from watson_developer_cloud import NaturalLanguageUnderstandingV1
 from watson_developer_cloud.natural_language_understanding_v1 import Features, SentimentOptions
 
-api_key = "fGK_MsJaJACU6Os3M9zw5wSkb7Tzw7ujAXs2kRLPBhgF"
 
-nlu = NaturalLanguageUnderstandingV1(
-    version='2022-08-10',  # E.g., '2018-11-16'
-    iam_apikey='fGK_MsJaJACU6Os3M9zw5wSkb7Tzw7ujAXs2kRLPBhgF',
-    url='https://api.us-east.natural-language-understanding.watson.cloud.ibm.com/instances/9bfd61e7-9121-4d41-87fc-f0d6fb05144e'
-)
 
 def get_request(url, api_key, **kwargs):
     print(kwargs)
