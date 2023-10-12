@@ -76,6 +76,17 @@
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
             </div>
         {% endif %}
-    </div>        
+    </div>
+    <div class="container mt-4">
+        <ul>
+            <!-- Loop through the JSON objects and display both short_name and ID -->
+            {% for dealer in dealers %}
+                <li>
+                    <a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{ dealer.short_name }} (ID: {{ dealer.id }})</a>
+                </li>
+            {% endfor %}
+        </ul>               
+    </div>   
+           
 </body>
 </html>

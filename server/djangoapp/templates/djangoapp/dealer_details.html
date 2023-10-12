@@ -2,17 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dealership Review</title>
-    {% load static %}
+    <title>Dealer Details</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
+<body>
+    <!-- Navigation bar (add your content here) -->
+    
+    <div class="container mt-4">
+        <!-- Dealer information -->
+        <h1>Dealer Details</h1>
+        <h2>{{ dealer_data.full_name }}</h2>
+        <p>Dealer ID: {{ dealer_data.id }}</p>
+        <p>City: {{ dealer_data.city }}</p>
+        <!-- Add more dealer details here -->
+    </div>
 
-    <body>
+    <div class="container mt-4">
+        <!-- Reviews section -->
+        <h2>Reviews</h2>
+        <div class="row">
+            {% for review, sentiment in reviews_and_sentiments %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Review</h5>
+                            <p class="card-text">{{ review.review }}</p>
+                            <h5 class="card-title">Sentiment</h5>
+                            <p class="card-text">{{ sentiment }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 
-    <!--Add a nav bar here -->
+    <!-- Add more content or styling as needed -->
 
-    <!-- Add reviews as cards -->
-
-    </body>
-
+</body>
 </html>

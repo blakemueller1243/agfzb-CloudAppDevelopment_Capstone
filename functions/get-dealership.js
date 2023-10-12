@@ -34,16 +34,15 @@ app.get('/dealerships/get', (req, res) => {
 
     // Create a selector object based on query parameters
     const selector = {};
-    if (state) {
-        selector.state = state;
-    }
+
+    // Check if the 'id' query parameter is provided and add it to the selector
     if (id) {
-        selector._id = id;
+        selector.id = parseInt(id); // Parse 'id' to an integer
     }
 
     const queryOptions = {
         selector,
-        limit: 10, // Limit the number of documents returned to 10
+        limit: 100,
     };
 
     db.find(queryOptions, (err, body) => {
