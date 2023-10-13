@@ -11,9 +11,12 @@
     <div class="container mt-4">
         <!-- Dealer information -->
         <h1>Dealer Details</h1>
-        <h2>{{ dealer_data.full_name }}</h2>
-        <p>Dealer ID: {{ dealer_data.id }}</p>
-        <p>City: {{ dealer_data.city }}</p>
+        <h2>{{ dealer_name }}</h2>
+        <p>Dealer ID: {{ dealer_id }}</p>
+        <p>City: {{ dealer_city }}</p>
+        <p>Address: {{ dealer_location }}</p>
+        <p>State: {{ dealer_state }}</p>
+        <p>Zip: {{ dealer_zip }}</p>
         <!-- Add more dealer details here -->
     </div>
 
@@ -21,7 +24,7 @@
         <!-- Reviews section -->
         <h2>Reviews</h2>
         <div class="row">
-            {% for review, sentiment in reviews_and_sentiments %}
+            {% for review in reviews %}
                 <div class="col-md-4 mb-4">
                     <div class="card">
                         <div class="card-body">

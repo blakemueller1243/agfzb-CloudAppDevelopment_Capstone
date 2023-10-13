@@ -2,27 +2,23 @@ import requests
 import json
 from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
-from watson_developer_cloud import NaturalLanguageUnderstandingV1
-from watson_developer_cloud.natural_language_understanding_v1 import Features, SentimentOptions
+# from watson_developer_cloud import NaturalLanguageUnderstandingV1
+# from watson_developer_cloud.natural_language_understanding_v1 import Features, SentimentOptions
 
 
-
-def get_request(url, api_key, **kwargs):
+def get_request(url, **kwargs):
     print(kwargs)
     print("GET from {} ".format(url))
     
     try:
         # Call get method of requests library with URL and parameters
-        headers = {
-            'Content-Type': 'application/json',
-            'Authorization': f'Bearer {api_key}'  # Use 'Bearer' with the API key
+        params = {
+            "text": kwargs["text"],
+            "version": kwargs["version"],
+            "features": kwargs["features"],
+            "return_analyzed_text": kwargs["return_analyzed_text"]
         }
-        params = dict()
-        params["text"] = kwargs["text"]
-        params["version"] = kwargs["version"]
-        params["features"] = kwargs["features"]
-        params["return_analyzed_text"] = kwargs["return_analyzed_text"]
-        response = requests.get(url, params=params, headers=headers)
+        response = requests.get(url, params=params)
         response.raise_for_status()  # Raise an exception for unsuccessful responses
     except Exception as e:
         # Handle exceptions and print error details
@@ -31,8 +27,9 @@ def get_request(url, api_key, **kwargs):
     
     status_code = response.status_code
     print("With status {} ".format(status_code))
-    json_data = json.loads(response.text)
+    json_data = response.json()
     return json_data
+
 
 
 
@@ -91,13 +88,14 @@ def get_dealer_by_id(dealer_id, **kwargs):
 
 # Update the get_dealer_reviews_from_cf method
 def get_dealer_reviews_from_cf(url, dealer_id):
-    url = f"{url}/dealerships/{dealer_id}/reviews"
-    json_results = get_request(url, api_key=api_key)
-
+    url = f"{url}"
+    json_results = get_request(url)
+    print(f"Requesting data from {url}")
+    
     if json_results is not None:
         results = []
         for json_result in json_results:
-            review_data = json_result.get("doc", {})
+            review_data = json_result
             dealer_review = DealerReview(
                 dealership=review_data.get("dealership", ""),
                 name=review_data.get("name", ""),
@@ -112,7 +110,7 @@ def get_dealer_reviews_from_cf(url, dealer_id):
             )
 
             # Analyze sentiment and assign it to the DealerReview object
-            dealer_review.sentiment = analyze_review_sentiments(dealer_review.review)
+            # dealer_review.sentiment = analyze_review_sentiments(dealer_review.review)
 
             results.append(dealer_review)
         return results
@@ -124,17 +122,17 @@ def get_dealer_reviews_from_cf(url, dealer_id):
 
 
 # Create an `analyze_review_sentiments` method to call Watson NLU and analyze text
-def analyze_review_sentiments(text):
-    # Analyze sentiment using Watson NLU
-    response = nlu.analyze(
-        text=text,
-        features=Features(sentiment=SentimentOptions())
-    )
+# def analyze_review_sentiments(text):
+#     # Analyze sentiment using Watson NLU
+#     response = nlu.analyze(
+#         text=text,
+#         features=Features(sentiment=SentimentOptions())
+#     )
 
-    # Extract sentiment label from the response
-    sentiment = response['sentiment']['document']['label']
+#     # Extract sentiment label from the response
+#     sentiment = response['sentiment']['document']['label']
 
-    return sentiment
+#     return sentiment
 
 
 

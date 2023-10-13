@@ -98,37 +98,54 @@ def get_dealerships(request):
 def get_dealer_details(request, dealer_id):
     if request.method == "GET":
         # Replace with your actual API endpoint for dealer details
-        url = f"https://blakemueller-3000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get?id={dealer_id}"
+        dealer_url = f"https://blakemueller-3000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get?id={dealer_id}"
+
+        # Replace with your actual API endpoint for dealer reviews
+        reviews_url = f"https://blakemueller-3001.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/{dealer_id}/reviews"
+        
 
         # Make an API request to get dealer details
-        response = requests.get(url)
+        dealer_response = requests.get(dealer_url)
+        reviews_response = requests.get(reviews_url)
+        print(dealer_response)
+        print(reviews_response)
 
-        if response.status_code == 200:
+        if dealer_response.status_code == 200 and reviews_response.status_code == 200:
             # Parse the JSON response for dealer details
-            dealer_data = json.loads(response.text)
-            
-            # Now, make an API request to get reviews by dealer ID
-            reviews = get_dealer_reviews_from_cf(url, dealer_id)
+            dealer_data = json.loads(dealer_response.text)
+            print(dealer_data)
+            # Parse the JSON response for dealer reviews
+            reviews_data = json.loads(reviews_response.text)
+            print(reviews_data)
+            # Extract dealer information
+            dealer_id = dealer_data[0].get("id", "")
+            dealer_name = dealer_data[0].get("full_name", "")
+            dealer_location = dealer_data[0].get("address", "")
+            dealer_city = dealer_data[0].get("city", "")
+            dealer_state = dealer_data[0].get("state", "")
+            dealer_zip = dealer_data[0].get("zip", "")
 
-            if reviews:
-                # Initialize an empty list to store sentiments
-                sentiments = []
-
-                # Iterate through reviews to get sentiments
-                for review in reviews:
-                    sentiments.append(review.sentiment)
-
-                context = {
-                    'dealer_data': dealer_data,
-                    'reviews': reviews,
-                    'sentiments': sentiments,
+            # Extract reviews data
+            reviews = []
+            for review_data in reviews_data:
+                review = {
+                    'review': review_data.get("review", ""),
+                    'sentiment': review_data.get("sentiment", ""),
                 }
-                return render(request, 'djangoapp/dealer_details.html', context)
-            else:
-                return HttpResponse("Dealer reviews not found or an error occurred")
-        else:
-            return HttpResponse("Dealer details not found or an error occurred")
+                reviews.append(review)
 
+            context = {
+                'dealer_id': dealer_id,
+                'dealer_name': dealer_name,
+                'dealer_location': dealer_location,
+                'dealer_city': dealer_city,
+                'dealer_state': dealer_state,
+                'dealer_zip': dealer_zip,
+                'reviews': reviews,
+            }
+            return render(request, 'djangoapp/dealer_details.html', context)
+        else:
+            return HttpResponse("Dealer details or reviews not found or an error occurred")
 
 
 
