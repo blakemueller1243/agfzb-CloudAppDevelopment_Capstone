@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
@@ -9,11 +8,12 @@ from django.contrib import messages
 from datetime import datetime
 import logging
 import json
-from django.contrib import messages
 import requests
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_watson.natural_language_understanding_v1 import Features, SentimentOptions
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+from django.urls import reverse
+
 
 
 # Get an instance of a logger
@@ -212,11 +212,11 @@ def add_review(request, dealer_id):
         if response.status_code == 201:
             # Review successfully added, you can redirect to a success page
             messages.success(request, "Review successfully added")
-            return redirect(reverse('dealer_details', args=[dealer_id]))
+            return redirect('djangoapp:dealer_details', dealer_id=dealer_id)
         else:
             # Handle the error or display an error message
             messages.error(request, "Failed to add the review. Please try again.")
-            return HttpResponse("Failed to add the review. Please try again.")
+            return redirect('djangoapp:dealer_details', dealer_id=dealer_id)
 
     return render(request, 'djangoapp/add_review.html', {'dealer_id': dealer_id})
 
