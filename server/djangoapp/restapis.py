@@ -86,53 +86,12 @@ def get_dealer_by_id(dealer_id, **kwargs):
     else:
         return None
 
-# Update the get_dealer_reviews_from_cf method
-def get_dealer_reviews_from_cf(url, dealer_id):
-    url = f"{url}"
-    json_results = get_request(url)
-    print(f"Requesting data from {url}")
-    
-    if json_results is not None:
-        results = []
-        for json_result in json_results:
-            review_data = json_result
-            dealer_review = DealerReview(
-                dealership=review_data.get("dealership", ""),
-                name=review_data.get("name", ""),
-                purchase=review_data.get("purchase", ""),
-                review=review_data.get("review", ""),
-                purchase_date=review_data.get("purchase_date", ""),
-                car_make=review_data.get("car_make", ""),
-                car_model=review_data.get("car_model", ""),
-                car_year=review_data.get("car_year", ""),
-                sentiment="",  # Initialize sentiment as empty
-                id=review_data.get("id", "")
-            )
-
-            # Analyze sentiment and assign it to the DealerReview object
-            # dealer_review.sentiment = analyze_review_sentiments(dealer_review.review)
-
-            results.append(dealer_review)
-        return results
-    else:
-        print("Dealer reviews not found or an error occurred.")
-        return []
+# Deleted get_dealer_reviews_by_cf because its obsolete. done inside of views.py now
 
 
-
-
+# moved to views.py now
 # Create an `analyze_review_sentiments` method to call Watson NLU and analyze text
-# def analyze_review_sentiments(text):
-#     # Analyze sentiment using Watson NLU
-#     response = nlu.analyze(
-#         text=text,
-#         features=Features(sentiment=SentimentOptions())
-#     )
-
-#     # Extract sentiment label from the response
-#     sentiment = response['sentiment']['document']['label']
-
-#     return sentiment
+# moved to views.py now
 
 
 

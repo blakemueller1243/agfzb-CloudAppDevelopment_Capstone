@@ -28,16 +28,27 @@
                 <div class="col-md-4 mb-4">
                     <div class="card">
                         <div class="card-body">
+                            <h5 class="card-title">Name</h5>
+                            <p class="card-text">{{ review.name }}</p>
                             <h5 class="card-title">Review</h5>
                             <p class="card-text">{{ review.review }}</p>
+                            <h5 class="card-title">Car Make</h5>
+                            <p class="card-text">{{ review.car_make }}</p>
+                            <h5 class="card-title">Car Model</h5>
+                            <p class="card-text">{{ review.car_model }}</p>
+                            <h5 class="card-title">Car Year</h5>
+                            <p class="card-text">{{ review.car_year }}</p>
+                            <h5 class="card-title">Purchase Date</h5>
+                            <p class="card-text">{{ review.purchase_date }}</p>
                             <h5 class="card-title">Sentiment</h5>
-                            <p class="card-text">{{ sentiment }}</p>
+                            <p class="card-text">{{ review.sentiment }}</p>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
     </div>
+    
 
     <!-- Add more content or styling as needed -->
 

@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 # from .models import related models
-from .restapis import get_dealer_by_id, get_dealer_reviews_from_cf
+from .restapis import get_dealer_by_id
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
@@ -11,12 +11,29 @@ import logging
 import json
 from django.contrib import messages
 import requests
+from ibm_watson import NaturalLanguageUnderstandingV1
+from ibm_watson.natural_language_understanding_v1 import Features, SentimentOptions
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+# watson api stuffs
+# nlu_api_key = 'YOUR_API_KEY'
+# nlu_url = 'YOUR_NLU_ENDPOINT_URL'
 
-# Create your views here.
+
+# Initialize the IAM authenticator with your API key
+authenticator = IAMAuthenticator(apikey=nlu_api_key)
+
+# Create the NLU instance with the authenticator
+nlu = NaturalLanguageUnderstandingV1(
+    version='2022-08-10',
+    authenticator=authenticator
+)
+nlu.set_service_url(nlu_url)
+
 
 
 # Create an `about` view to render a static about page
@@ -129,10 +146,21 @@ def get_dealer_details(request, dealer_id):
             reviews = []
             for review_data in reviews_data:
                 review = {
+                    'name': review_data.get("name", ""),
                     'review': review_data.get("review", ""),
-                    'sentiment': review_data.get("sentiment", ""),
+                    'car_make': review_data.get("car_make", ""),
+                    'car_model': review_data.get("car_model", ""),
+                    'car_year': review_data.get("car_year", ""),
+                    'purchase_date': review_data.get("purchase_date", ""),
+                    'sentiment': "",  # Initialize sentiment as empty
                 }
                 reviews.append(review)
+
+            # Analyze sentiment for each review
+            for review in reviews:
+                review_text = review['review']
+                sentiment_analysis = analyze_review_sentiments(nlu, review_text)
+                review['sentiment'] = sentiment_analysis
 
             context = {
                 'dealer_id': dealer_id,
@@ -144,8 +172,9 @@ def get_dealer_details(request, dealer_id):
                 'reviews': reviews,
             }
             return render(request, 'djangoapp/dealer_details.html', context)
+
         else:
-            return HttpResponse("Dealer details or reviews not found or an error occurred")
+            return HttpResponse("Invalid request method")
 
 
 
@@ -153,3 +182,18 @@ def get_dealer_details(request, dealer_id):
 # def add_review(request, dealer_id):
 # ...
 
+
+
+# Watson ibm sentiment analysis
+def analyze_review_sentiments(nlu, review_text):
+    try:
+        response = nlu.analyze(
+            text=review_text,
+            features=Features(sentiment=SentimentOptions())
+        )
+
+        sentiment_score = response.result['sentiment']['document']['score']
+        return "Positive" if sentiment_score > 0 else "Negative" if sentiment_score < 0 else "Neutral"
+    except Exception as e:
+        print("Error analyzing sentiment:", str(e))
+        return "Error"
