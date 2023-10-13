@@ -22,7 +22,8 @@ logger = logging.getLogger(__name__)
 # watson api stuffs
 # nlu_api_key = 'YOUR_API_KEY'
 # nlu_url = 'YOUR_NLU_ENDPOINT_URL'
-
+nlu_api_key = 'VgAZhKH70zgSgB7IDtsOSI8lkbl0RVTZuhYLSD9siW6N'
+nlu_url = 'https://api.us-east.natural-language-understanding.watson.cloud.ibm.com/instances/9bfd61e7-9121-4d41-87fc-f0d6fb05144e'
 
 # Initialize the IAM authenticator with your API key
 authenticator = IAMAuthenticator(apikey=nlu_api_key)
@@ -179,10 +180,45 @@ def get_dealer_details(request, dealer_id):
 
 
 # Create a `add_review` view to submit a review
-# def add_review(request, dealer_id):
-# ...
+def add_review(request, dealer_id):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        review = request.POST.get('review')
+        purchase = request.POST.get('purchase') == 'True'
+        purchase_date = request.POST.get('purchase_date')
+        car_make = request.POST.get('car_make')
+        car_model = request.POST.get('car_model')
+        car_year = request.POST.get('car_year')
 
+        review_data = {
+            "name": name,
+            "review": review,
+            "purchase": purchase,
+            "purchase_date": purchase_date,
+            "car_make": car_make,
+            "car_model": car_model,
+            "car_year": car_year
+        }
 
+        # Use the API endpoint from settings
+        reviews_api_url = f"https://blakemueller-3001.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/{dealer_id}/reviews"
+
+        headers = {
+            'Content-Type': 'application/json',
+        }
+
+        response = requests.post(reviews_api_url, json=review_data, headers=headers)
+
+        if response.status_code == 201:
+            # Review successfully added, you can redirect to a success page
+            messages.success(request, "Review successfully added")
+            return redirect(reverse('dealer_details', args=[dealer_id]))
+        else:
+            # Handle the error or display an error message
+            messages.error(request, "Failed to add the review. Please try again.")
+            return HttpResponse("Failed to add the review. Please try again.")
+
+    return render(request, 'djangoapp/add_review.html', {'dealer_id': dealer_id})
 
 # Watson ibm sentiment analysis
 def analyze_review_sentiments(nlu, review_text):

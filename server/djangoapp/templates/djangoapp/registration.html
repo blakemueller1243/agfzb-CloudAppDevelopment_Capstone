@@ -17,7 +17,7 @@
                 {% endfor %}
             </div>
         {% endif %}
-        <form method="post" action="{% url 'djangoapp:registration' %}">
+        <form method="post" action="{% url 'djangoapp:registration' dealer_id=dealer_id %}">
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">Username:</label>

@@ -48,9 +48,10 @@
             {% endfor %}
         </div>
     </div>
-    
 
-    <!-- Add more content or styling as needed -->
+    <div class="container mt-4">
+        <a href="{% url 'djangoapp:add_review' dealer_id=dealer_id %}" class="btn btn-primary">Add a Review</a>
+    </div>
 
 </body>
 </html>
