@@ -7,7 +7,21 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>    
+    <style>
+        .form-group {
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+        .form-check {
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+        .btn {
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+    </style>
 </head>
 <body>
     {% include 'djangoapp/navbar.html' %}
@@ -26,20 +40,17 @@
             <label class="form-check-label" for="purchase">Made a purchase</label>
         </div>        
         <div class="form-group">
+            <label for="car_model">Car Model:</label>
+            <select class="form-control" id="car_model" name="car_model" required>
+                {% for car in car_models %}
+                    <option value="{{ car.id }}">{{ car.car_make.name }} - {{ car.name }} - {{ car.year|date:"Y" }}</option>
+                {% endfor %}
+            </select>
+                        
+        </div>
+        <div class="form-group">
             <label for="purchase_date">Purchase Date:</label>
             <input type="text" class="form-control datepicker" id="purchase_date" name="purchase_date" placeholder="Select a date" required>
-        </div>
-        <div class="form-group">
-            <label for="car_make">Car Make:</label>
-            <input type="text" class="form-control" id="car_make" name="car_make" placeholder="Enter car make" required>
-        </div>
-        <div class="form-group">
-            <label for="car_model">Car Model:</label>
-            <input type text" class="form-control" id="car_model" name="car_model" placeholder="Enter car model" required>
-        </div>
-        <div class="form-group">
-            <label for="car_year">Car Year:</label>
-            <input type="number" class="form-control" id="car_year" name="car_year" placeholder="Enter car year" required>
         </div>
         <input type="hidden" id="dealer_id" name="dealer_id">
         <button type="submit" class="btn btn-primary">Submit Review</button>
@@ -51,6 +62,16 @@
         // Set the dealer_id as a value in the form
         document.getElementById("dealer_id").value = dealerId;
     </script>
-    
+    <script>
+        $(document).ready(function(){
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',  // Date format, change it according to your needs
+                autoclose: true
+            }).on('changeDate', function(e) {
+                // When a date is selected, update the input value with the selected date in 'yyyy-mm-dd' format
+                $(this).val(e.format('yyyy-mm-dd'));
+            });
+        });
+    </script>    
 </body>
 </html>

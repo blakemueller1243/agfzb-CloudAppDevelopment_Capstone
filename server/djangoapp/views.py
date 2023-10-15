@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
-# from .models import related models
+from .models import CarModel
 from .restapis import get_dealer_by_id
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -195,9 +195,14 @@ def add_review(request, dealer_id):
         review = request.POST.get('review')
         purchase = request.POST.get('purchase') == 'True'
         purchase_date = request.POST.get('purchase_date')
-        car_make = request.POST.get('car_make')
-        car_model = request.POST.get('car_model')
-        car_year = request.POST.get('car_year')
+        
+        # Extract the car_model ID from the submitted form
+        car_model_id = request.POST.get('car_model')
+        
+        # Retrieve the CarModel object using the car_model ID
+        car_model_obj = CarModel.objects.get(pk=car_model_id)
+        car_make = car_model_obj.car_make.name
+        car_year = car_model_obj.year
 
         review_data = {
             "name": name,
@@ -205,7 +210,7 @@ def add_review(request, dealer_id):
             "purchase": purchase,
             "purchase_date": purchase_date,
             "car_make": car_make,
-            "car_model": car_model,
+            "car_model": car_model_obj.name,  # Use the car model's name
             "car_year": car_year
         }
 
@@ -226,8 +231,11 @@ def add_review(request, dealer_id):
             # Handle the error or display an error message
             messages.error(request, "Failed to add the review. Please try again.")
             return redirect('djangoapp:dealer_details', dealer_id=dealer_id)
+    
+    car_models = CarModel.objects.all()
+    print(car_models)
+    return render(request, 'djangoapp/add_review.html', {'dealer_id': dealer_id, 'car_models': car_models})
 
-    return render(request, 'djangoapp/add_review.html', {'dealer_id': dealer_id})
 
 # Watson ibm sentiment analysis
 def analyze_review_sentiments(nlu, review_text):
