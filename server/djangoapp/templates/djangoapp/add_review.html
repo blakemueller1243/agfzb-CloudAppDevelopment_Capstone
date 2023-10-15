@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
 </head>
 <body>
-    {% include 'djangoapp/index.html' %}
+    {% include 'djangoapp/navbar.html' %}
     <form method="post" action="{% url 'djangoapp:add_review' dealer_id=dealer_id %}">
         {% csrf_token %}
         <div class="form-group">

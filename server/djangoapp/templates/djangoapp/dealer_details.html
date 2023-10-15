@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-    {% include 'djangoapp/index.html' %}
+    {% include 'djangoapp/navbar.html' %}
     <!-- Navigation bar (add your content here) -->
     
     <div class="container mt-4">
@@ -22,33 +22,23 @@
     </div>
 
     <div class="container mt-4">
-        <!-- Reviews section -->
         <h2>Reviews</h2>
         <div class="row">
             {% for review in reviews %}
                 <div class="col-md-4 mb-4">
-                    <div class="card">
+                    <div class="card review-card">
+                        <img src="/media/emoji/{{ review.sentiment|lower }}.png" class="card-img-top" style="max-height: 50px; width: auto; margin: 10px auto;">
+
+
                         <div class="card-body">
-                            <h5 class="card-title">Name</h5>
-                            <p class="card-text">{{ review.name }}</p>
-                            <h5 class="card-title">Review</h5>
-                            <p class="card-text">{{ review.review }}</p>
-                            <h5 class="card-title">Car Make</h5>
-                            <p class="card-text">{{ review.car_make }}</p>
-                            <h5 class="card-title">Car Model</h5>
-                            <p class="card-text">{{ review.car_model }}</p>
-                            <h5 class="card-title">Car Year</h5>
+                            <h5 class="card-title">{{ review.car_make }}, {{ review.car_model }}</h5>
                             <p class="card-text">{{ review.car_year }}</p>
-                            <h5 class="card-title">Purchase Date</h5>
-                            <p class="card-text">{{ review.purchase_date }}</p>
-                            <h5 class="card-title">Sentiment</h5>
-                            <p class="card-text">{{ review.sentiment }}</p>
+                            <p class="card-text"><strong>{{ review.review }}</strong></p>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
-    </div>
 
     <div class="container mt-4">
         <a href="{% url 'djangoapp:add_review' dealer_id=dealer_id %}" class="btn btn-primary">Add a Review</a>

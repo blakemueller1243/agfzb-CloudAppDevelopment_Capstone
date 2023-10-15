@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 # watson api stuffs
 # nlu_api_key = 'YOUR_API_KEY'
 # nlu_url = 'YOUR_NLU_ENDPOINT_URL'
-nlu_api_key = 'VgAZhKH70zgSgB7IDtsOSI8lkbl0RVTZuhYLSD9siW6N'
+nlu_api_key = '8ljSs548WCZ7jC16cRJF16ZD3pvMly_e-Tsn_7DNc-u7'
 nlu_url = 'https://api.us-east.natural-language-understanding.watson.cloud.ibm.com/instances/9bfd61e7-9121-4d41-87fc-f0d6fb05144e'
 
 # Initialize the IAM authenticator with your API key
@@ -94,7 +94,7 @@ def registration_request(request):
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
     if request.method == "GET":
-        url = "https://blakemueller-3000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get"
+        url = "https://blakemueller-3000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get"
 
         # Make an HTTP GET request to the URL
         response = requests.get(url)
@@ -104,7 +104,16 @@ def get_dealerships(request):
             dealerships = json.loads(response.text)
 
             # Create a list of dictionaries with short_name and id
-            dealer_data = [{'short_name': dealer['short_name'], 'id': dealer['id']} for dealer in dealerships]
+            dealer_data = [
+                {
+                    'id': dealer['id'],
+                    'short_name': dealer['short_name'],
+                    'city': dealer['city'],
+                    'address': dealer['address'],
+                    'zip': dealer['zip'],
+                    'st': dealer['st']
+                } for dealer in dealerships
+            ]
 
             # Pass the JSON data to the template
             return render(request, 'djangoapp/index.html', {'dealers': dealer_data})
@@ -116,10 +125,10 @@ def get_dealerships(request):
 def get_dealer_details(request, dealer_id):
     if request.method == "GET":
         # Replace with your actual API endpoint for dealer details
-        dealer_url = f"https://blakemueller-3000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get?id={dealer_id}"
+        dealer_url = f"https://blakemueller-3000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get?id={dealer_id}"
 
         # Replace with your actual API endpoint for dealer reviews
-        reviews_url = f"https://blakemueller-3001.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/{dealer_id}/reviews"
+        reviews_url = f"https://blakemueller-3001.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/{dealer_id}/reviews"
         
 
         # Make an API request to get dealer details
@@ -201,7 +210,7 @@ def add_review(request, dealer_id):
         }
 
         # Use the API endpoint from settings
-        reviews_api_url = f"https://blakemueller-3001.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/{dealer_id}/reviews"
+        reviews_api_url = f"https://blakemueller-3001.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/{dealer_id}/reviews"
 
         headers = {
             'Content-Type': 'application/json',
