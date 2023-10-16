@@ -50,7 +50,7 @@
         </div>
         <div class="form-group">
             <label for="purchase_date">Purchase Date:</label>
-            <input type="text" class="form-control datepicker" id="purchase_date" name="purchase_date" placeholder="Select a date" required>
+            <input type="text" class="form-control" id="purchase_date" name="purchase_date" placeholder="Select a date" required>
         </div>
         <input type="hidden" id="dealer_id" name="dealer_id">
         <button type="submit" class="btn btn-primary">Submit Review</button>
@@ -61,17 +61,6 @@
     
         // Set the dealer_id as a value in the form
         document.getElementById("dealer_id").value = dealerId;
-    </script>
-    <script>
-        $(document).ready(function(){
-            $('.datepicker').datepicker({
-                format: 'yyyy-mm-dd',  // Date format, change it according to your needs
-                autoclose: true
-            }).on('changeDate', function(e) {
-                // When a date is selected, update the input value with the selected date in 'yyyy-mm-dd' format
-                $(this).val(e.format('yyyy-mm-dd'));
-            });
-        });
-    </script>    
+    </script>  
 </body>
 </html>
