@@ -4,6 +4,7 @@
   "description": "",
   "main": "get-dealership.js",
   "scripts": {
+    "start": "concurrently \"node get-dealership.js\" \"node get-dealership-reviews.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,6 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "@cloudant/cloudant": "^4.5.1",
+    "concurrently": "^8.2.1",
     "express": "^4.18.2"
   }
 }

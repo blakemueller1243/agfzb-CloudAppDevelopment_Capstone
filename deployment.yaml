@@ -57,3 +57,37 @@ spec:
         ports:
         - containerPort: 8000
       restartPolicy: Always
+
+---
+# api for getting dealer details
+apiVersion: v1
+kind: Service
+metadata:
+  name: dealership-api-service-3000
+  labels:
+    app: dealership
+spec:
+  type: NodePort
+  selector:
+    app: dealership
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+
+---
+# api for getting dealer review
+apiVersion: v1
+kind: Service
+metadata:
+  name: dealership-api-service-3001
+  labels:
+    app: dealership
+spec:
+  type: NodePort
+  selector:
+    app: dealership
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3001

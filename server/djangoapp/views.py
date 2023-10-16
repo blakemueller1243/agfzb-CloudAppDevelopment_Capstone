@@ -94,7 +94,7 @@ def registration_request(request):
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
     if request.method == "GET":
-        url = "https://blakemueller-3000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get"
+        url = "http://dealership-api-service-3000:80/dealerships/get"
 
         # Make an HTTP GET request to the URL
         response = requests.get(url)
@@ -125,10 +125,10 @@ def get_dealerships(request):
 def get_dealer_details(request, dealer_id):
     if request.method == "GET":
         # Replace with your actual API endpoint for dealer details
-        dealer_url = f"https://blakemueller-3000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get?id={dealer_id}"
+        dealer_url = f"http://dealership-api-service-3000:80/dealerships/get?id={dealer_id}"
 
         # Replace with your actual API endpoint for dealer reviews
-        reviews_url = f"https://blakemueller-3001.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/{dealer_id}/reviews"
+        reviews_url = f"http://dealership-api-service-3001:80/dealerships/{dealer_id}/reviews"
         
 
         # Make an API request to get dealer details
@@ -186,44 +186,6 @@ def get_dealer_details(request, dealer_id):
         else:
             return HttpResponse("Invalid request method")
 
-
-# def add_review(request, dealer_id):
-#     if request.method == "POST":
-#         name = request.POST.get('name')
-#         review = request.POST.get('review')
-#         purchase = request.POST.get('purchase') == 'True'
-#         purchase_date = request.POST.get('purchase_date')
-#         car_make = request.POST.get('car_make')
-#         car_model = request.POST.get('car_model')
-#         car_year = request.POST.get('car_year')
-
-#         review_data = {
-#             "name": name,
-#             "review": review,
-#             "purchase": purchase,
-#             "purchase_date": purchase_date,
-#             "car_make": car_make,
-#             "car_model": car_model,
-#             "car_year": car_year
-#         }
-
-#         # Use the API endpoint from settings
-#         reviews_api_url = f"https://blakemueller-3001.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/{dealer_id}/reviews"
-
-#         headers = {
-#             'Content-Type': 'application/json',
-#         }
-
-#         response = requests.post(reviews_api_url, json=review_data, headers=headers)
-
-#         if response.status_code == 201:
-#             # Review successfully added, you can redirect to a success page
-#             messages.success(request, "Review successfully added")
-#             return redirect(reverse('dealer_details', args=[dealer_id]))
-#         else:
-#             # Handle the error or display an error message
-#             messages.error(request, "Failed to add the review. Please try again.")
-#             return HttpResponse("Failed to add the review. Please try again.")
 # Create a `add_review` view to submit a review
 def add_review(request, dealer_id):
     if request.method == "POST":
@@ -252,7 +214,7 @@ def add_review(request, dealer_id):
         }
         print(review_data)
         # Use the API endpoint from settings
-        reviews_api_url = f"https://blakemueller-3001.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/{dealer_id}/reviews"
+        reviews_api_url = f"http://dealership-api-service-3001:80/dealerships/{dealer_id}/reviews"
 
         headers = {
             'Content-Type': 'application/json',
