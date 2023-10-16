@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  django:
+    build: server
+    ports:
+      - "8000:8000"
+  api1:
+    build: functions
+    command: node get-dealership.js
+    ports:
+      - "3000:3000"
+  api2:
+    build: functions
+    command: node get-dealership-reviews.js
+    ports:
+      - "3001:3001"
