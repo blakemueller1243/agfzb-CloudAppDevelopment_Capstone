@@ -67,7 +67,6 @@ metadata:
   labels:
     app: dealership
 spec:
-  type: NodePort
   selector:
     app: dealership
   ports:
@@ -84,7 +83,6 @@ metadata:
   labels:
     app: dealership
 spec:
-  type: NodePort
   selector:
     app: dealership
   ports:

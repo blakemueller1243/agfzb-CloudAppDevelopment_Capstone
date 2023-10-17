@@ -94,7 +94,7 @@ def registration_request(request):
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
     if request.method == "GET":
-        url = "http://dealership-api-service-3000:80/dealerships/get"
+        url = "http://dealership-api-service-3000:3000/dealerships/get"
 
         # Make an HTTP GET request to the URL
         response = requests.get(url)
@@ -125,10 +125,10 @@ def get_dealerships(request):
 def get_dealer_details(request, dealer_id):
     if request.method == "GET":
         # Replace with your actual API endpoint for dealer details
-        dealer_url = f"http://dealership-api-service-3000:80/dealerships/get?id={dealer_id}"
+        dealer_url = f"http://dealership-api-service-3000:3000/dealerships/get?id={dealer_id}"
 
         # Replace with your actual API endpoint for dealer reviews
-        reviews_url = f"http://dealership-api-service-3001:80/dealerships/{dealer_id}/reviews"
+        reviews_url = f"http://dealership-api-service-3001:3001/dealerships/{dealer_id}/reviews"
         
 
         # Make an API request to get dealer details
@@ -214,7 +214,7 @@ def add_review(request, dealer_id):
         }
         print(review_data)
         # Use the API endpoint from settings
-        reviews_api_url = f"http://dealership-api-service-3001:80/dealerships/{dealer_id}/reviews"
+        reviews_api_url = f"http://dealership-api-service-3001:3001/dealerships/{dealer_id}/reviews"
 
         headers = {
             'Content-Type': 'application/json',
